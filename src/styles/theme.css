@@ -1,0 +1,389 @@
+/* =========================
+   THEME.CSS (FINAL CLEAN)
+   ========================= */
+
+/* Base background */
+body{
+  background:
+    radial-gradient(1200px 800px at 18% 18%, rgba(255,184,108,.16), transparent 60%),
+    radial-gradient(900px 700px at 82% 78%, rgba(255,106,61,.14), transparent 58%),
+    radial-gradient(700px 500px at 55% 10%, rgba(175,131,255,.12), transparent 60%),
+    linear-gradient(120deg, #0b0b12, #140b24, #0b0b12);
+}
+
+/* Animated aurora glow */
+body::before{
+  content:"";
+  position: fixed;
+  inset:-30%;
+  pointer-events:none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(56,189,248,.10), transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(255,184,108,.10), transparent 55%),
+    radial-gradient(circle at 55% 35%, rgba(255,106,61,.08), transparent 55%),
+    radial-gradient(circle at 35% 75%, rgba(175,131,255,.08), transparent 55%);
+  filter: blur(28px);
+  animation: auroraMove 14s ease-in-out infinite;
+  opacity: .95;
+}
+@keyframes auroraMove{
+  0%,100% { transform: translate3d(0,0,0) scale(1); }
+  50%     { transform: translate3d(-2.5%, 2%, 0) scale(1.06); }
+}
+
+/* Fine grain */
+body::after{
+  content:"";
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  z-index: 1;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.035) 1px, transparent 0);
+  background-size: 18px 18px;
+  opacity: .22;
+  mix-blend-mode: overlay;
+}
+
+/* TWINKLES */
+.twinkleLayer{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .62;
+}
+.twinkleDot{
+  position:absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,184,108,.95), rgba(255,106,61,.55), transparent 70%);
+  filter: drop-shadow(0 0 14px rgba(255,184,108,.22));
+  opacity: .45;
+}
+body[data-page="intro"] .twinkleLayer{ opacity: .88; }
+
+/* DECOR */
+.decorLayer{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: .95;
+}
+.sticker{
+  position:absolute;
+  font-size: clamp(18px, 2.2vw, 30px);
+  opacity: .16;
+  filter: drop-shadow(0 18px 40px rgba(0,0,0,.55));
+  transform: translateZ(0);
+  animation: stickerFloat 7.5s ease-in-out infinite;
+}
+@keyframes stickerFloat{
+  0%,100%{ transform: translateY(0) rotate(0deg); }
+  50%{ transform: translateY(-10px) rotate(2deg); }
+}
+
+/* BOKEH */
+.bokeh{
+  position: fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:.35;
+}
+.bokeh i{
+  position:absolute;
+  border-radius:999px;
+  background: radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,.22), rgba(255,255,255,.05), transparent 70%);
+  filter: blur(1px);
+  animation: bokehFloat 10s ease-in-out infinite;
+}
+@keyframes bokehFloat{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-14px); }
+}
+
+/* SNOW */
+.snowflake{
+  position: fixed;
+  top: -12px;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  opacity: .78;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+  pointer-events: none;
+  z-index: 4;
+  transform: translate3d(0,0,0);
+  animation-name: snowFall;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+@keyframes snowFall{
+  to{ transform: translate3d(var(--dx, 0px), 112vh, 0); }
+}
+
+/* PIN */
+.pinWrap{
+  display:flex;
+  gap:10px;
+  margin-top: 18px;
+}
+.pin{
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.22);
+  color: rgba(255,255,255,.92);
+  font-size: 22px;
+  text-align:center;
+  outline: none;
+}
+.pin:focus{
+  border-color: rgba(255,184,108,.45);
+  box-shadow: 0 0 0 6px rgba(255,184,108,.10);
+}
+
+/* SCRATCH */
+#scratchCanvas{
+  cursor: crosshair;
+}
+@media (max-width: 520px){
+  .scratchMsg{
+    font-size: 1.15rem;
+    padding: 16px;
+  }
+}
+
+.scratchWrap{
+  margin-top: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.16);
+  overflow:hidden;
+  position: relative;
+  width: min(520px, 100%);
+}
+.scratchMsg{
+  color: rgba(255,255,255, 0.08);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  text-align: center;
+  padding: 20px;
+  transition: color .4s ease;
+  user-select: none;
+}
+.scratchReveal{
+  color: rgba(255, 235, 200, 0.95);
+  text-shadow: 0 0 12px rgba(255, 190, 120, 0.6);
+}
+#scratchCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  touch-action: none;
+}
+
+/* SPARK */
+.sparkWrap{
+  margin-top: 16px;
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  position: relative;
+  padding: 14px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.14);
+  overflow: visible;
+}
+.sparkParticles{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+.sparkOrb{
+  --sparkScale: 1;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,184,108,.30);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 32% 28%,
+      rgba(255,255,255,.98) 0%,
+      rgba(255,220,170,.95) 22%,
+      rgba(255,184,108,.88) 45%,
+      rgba(255,106,61,.70) 66%,
+      rgba(175,131,255,.18) 78%,
+      rgba(0,0,0,0) 82%);
+  box-shadow:
+    0 0 26px rgba(255,200,140,.36),
+    0 18px 60px rgba(0,0,0,.45);
+  filter: saturate(1.12) brightness(1.02);
+  transform: scale(var(--sparkScale));
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+  will-change: transform, filter;
+}
+.sparkOrb.done{
+  filter: saturate(1.25) brightness(1.12);
+  box-shadow:
+    0 0 120px rgba(255,200,150,.85),
+    0 18px 90px rgba(0,0,0,.60);
+}
+.sparkText{
+  z-index: 3;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255,255,255,.80);
+}
+.sparkSub{
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: .7;
+}
+.sparkParticle{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,.95),
+    rgba(255,184,108,.92) 45%,
+    rgba(255,106,61,.70) 75%,
+    transparent 78%);
+  box-shadow:
+    0 0 16px rgba(255,210,150,.65),
+    0 0 42px rgba(255,120,60,.35);
+  opacity: .95;
+}
+.sparkBurst{
+  animation: sparkBurst 900ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes sparkBurst{
+  to{
+    transform:
+      translate(calc(-50% + var(--x, 0px)),
+                calc(-50% + var(--y, 0px)))
+      scale(var(--s, 1));
+    opacity: 0;
+    filter: blur(.4px);
+  }
+}
+
+/* NOTE STAMP */
+.noteSealWrap{
+  position: relative;
+  margin-top: 14px;
+  display: none;
+}
+.noteSealWrap.show{ display: block; }
+
+.noteStamp{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,184,108,.26);
+  background: linear-gradient(135deg, rgba(255,106,61,.14), rgba(255,184,108,.08));
+  box-shadow:
+    0 18px 55px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  transform-origin: 20% 80%;
+  opacity: 0;
+  transform: translateY(10px) rotate(-10deg) scale(.94);
+  filter: blur(1.2px);
+  position: relative;
+}
+.noteStamp .sealIcon{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%,
+    rgba(255,255,255,.95),
+    rgba(255,184,108,.85),
+    rgba(255,106,61,.55));
+  box-shadow: 0 0 22px rgba(255,200,140,.45);
+}
+.noteStamp .sealText{
+  font-size: 13px;
+  opacity: .86;
+  color: rgba(255,255,255,.85);
+}
+.noteStamp.play{
+  animation: stampIn 620ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes stampIn{
+  0%{
+    opacity: 0;
+    transform: translateY(14px) rotate(-14deg) scale(.90);
+    filter: blur(2px);
+  }
+  60%{
+    opacity: 1;
+    transform: translateY(0) rotate(3deg) scale(1.05);
+    filter: blur(0);
+  }
+  82%{ transform: translateY(0) rotate(-2deg) scale(.98); }
+  100%{
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+/* ALBUM */
+.albumOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  place-items: center;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(10px);
+}
+.albumOverlay.show{ display: grid; }
+
+.albumStage{
+  width: min(92vw, 980px);
+  border-radius: 26px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.32));
+  box-shadow: 0 30px 90px rgba(0,0,0,.55);
+  overflow: hidden;
+  position: relative;
+  padding: 14px;
+}
+.albumClose{
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  z-index: 2;
+}
+.albumTrack{
+  border-radius: 22px;
+  overflow:hidden;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.12);
+  min-height: 56vh;
+  display:grid;
+  place-items:center;
+}
+.slideCard img{
+  width: 100%;
+  height: 56vh;
+  object-fit: contain;
+  display:block;
+}

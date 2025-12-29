@@ -1,0 +1,109 @@
+/* =========================
+   ANIMATIONS.CSS (FINAL CLEAN)
+   ========================= */
+
+/* Page transition */
+.page-enter{
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-enter-active{
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 420ms ease, transform 420ms ease;
+}
+
+/* Reveal */
+.reveal{
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 520ms ease, transform 520ms ease;
+  transition-delay: var(--d, 0ms);
+}
+.play .reveal{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Soft float */
+.float-soft{
+  animation: floatSoft 6.5s ease-in-out infinite;
+}
+@keyframes floatSoft{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-10px); }
+}
+
+/* Twinkle */
+.twinkle{
+  animation: twinkle 6s ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{ opacity: .25; transform: scale(.9); }
+  50%{ opacity: .75; transform: scale(1.15); }
+}
+
+/* Spark orb pulse */
+.sparkOrb.pulse{
+  animation: sparkPulse 260ms ease-out;
+}
+@keyframes sparkPulse{
+  0%{ transform: scale(var(--sparkScale, 1)); }
+  60%{ transform: scale(calc(var(--sparkScale, 1) + .10)); }
+  100%{ transform: scale(var(--sparkScale, 1)); }
+}
+
+/* Rays */
+.sparkRay{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width: 3px;
+  height: 38px;
+  transform-origin: 50% 100%;
+  transform: translate(-50%,-100%) rotate(var(--a, 0deg));
+  background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,184,108,.7), transparent);
+  border-radius: 999px;
+  opacity: .0;
+}
+.sparkRay.boom{
+  animation: rayBoom 520ms ease-out forwards;
+}
+@keyframes rayBoom{
+  0%{ opacity: 0; transform: translate(-50%,-100%) rotate(var(--a,0deg)) scaleY(.4); }
+  35%{ opacity: 1; }
+  100%{ opacity: 0; transform: translate(-50%,-110%) rotate(var(--a,0deg)) scaleY(1.1); }
+}
+
+/* Slide enter/exit (album) */
+.slideEnter{
+  opacity: 0;
+  transform: translateY(12px) scale(.98);
+}
+.slideEnter.slideEnterActive{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+.slideExit{
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.slideExit.slideExitActive{
+  opacity: 0;
+  transform: translateY(-12px) scale(.98);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .page-enter, .page-enter-active,
+  .float-soft, .twinkle,
+  .reveal, .play .reveal{
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}
