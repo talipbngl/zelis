@@ -303,3 +303,47 @@ button:hover{
   border-color: rgba(255,184,108,.30);
   background: linear-gradient(135deg, rgba(255,106,61,.24), rgba(255,184,108,.14));
 }
+/* ==== SIDE CAT LAYOUT ==== */
+
+.splitLayout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+  align-items: center;
+}
+
+.sideImage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sideImage img {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 22px;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.45),
+    0 0 0 1px rgba(255,255,255,.08);
+  animation: floatCat 6s ease-in-out infinite;
+}
+
+/* Hafif hareket */
+@keyframes floatCat {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* MOBİL */
+@media (max-width: 860px) {
+  .splitLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .sideImage {
+    order: -1;
+    margin-bottom: 20px;
+  }
+}
