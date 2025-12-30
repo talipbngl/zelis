@@ -747,7 +747,7 @@ if (index === 0) {
                   <>
                     <div className="scratchWrap reveal lift" style={{ "--d": "420ms" }}>
                       <div className="scratchMsg" id="scratchMsg">
-                        {"Zeliş…\nYeni yılda en sevdiğim şey: biz.\nEn sevdiğim yer: senin yanın.\nMutlu yıllar yavrum."
+                        {"Zeliş…\nYeni yılın bana kattığı En güzel şey: SENSİN \n Seninle olmak çok özel hissettiriyor. \nMutlu yıllar yavrum."
                           .split("\n")
                           .map((line, i) => (
                             <React.Fragment key={i}>
