@@ -22,6 +22,109 @@ function stepMessageForIndex(i) {
 function clamp(n, a, b) {
   return Math.max(a, Math.min(b, n));
 }
+function spawnFullScreenHeartsFromStamp() {
+  const stamp = document.getElementById("noteStamp");
+  if (!stamp) return;
+
+  const r = stamp.getBoundingClientRect();
+  const cx = r.left + r.width * 0.25;
+  const cy = r.top + r.height * 0.55;
+
+  let layer = document.getElementById("heartsFullscreen");
+  if (!layer) {
+    layer = document.createElement("div");
+    layer.id = "heartsFullscreen";
+    layer.setAttribute("aria-hidden", "true");
+    document.body.appendChild(layer);
+  }
+
+  layer.innerHTML = "";
+  layer.classList.remove("run");
+  void layer.offsetWidth;
+  layer.classList.add("run");
+
+  const vw = window.innerWidth || 1200;
+  const vh = window.innerHeight || 800;
+
+  const COUNT = 180; // ekranı daha çok kaplasın
+  for (let i = 0; i < COUNT; i++) {
+    const h = document.createElement("i");
+    h.className = "fsHeart";
+
+    h.style.left = `${cx}px`;
+    h.style.top = `${cy}px`;
+
+    const tx = (Math.random() * vw - cx) * (0.85 + Math.random() * 0.55);
+    const ty = (Math.random() * vh - cy) * (0.85 + Math.random() * 0.55);
+
+    h.style.setProperty("--tx", `${tx.toFixed(1)}px`);
+    h.style.setProperty("--ty", `${ty.toFixed(1)}px`);
+
+    const size = 10 + Math.random() * 20;
+    h.style.width = `${size}px`;
+    h.style.height = `${size}px`;
+    h.style.setProperty("--rot", `${(Math.random() * 90 - 45).toFixed(1)}deg`);
+
+    // daha "bir anda" ama yavaş yayılma: kısa delay aralığı, uzun duration
+    h.style.setProperty("--delay", `${Math.floor(Math.random() * 80)}ms`);
+    h.style.setProperty("--dur", `${(2600 + Math.random() * 1800).toFixed(0)}ms`);
+    h.style.setProperty("--s", `${(0.7 + Math.random() * 1.3).toFixed(2)}`);
+
+    layer.appendChild(h);
+  }
+
+  setTimeout(() => {
+    if (layer) layer.innerHTML = "";
+  }, 5200);
+}
+
+
+
+function pulseHeartButton() {
+  const btn = document.getElementById("heartBtn");
+  if (!btn) return;
+  btn.classList.remove("beat");
+  void btn.offsetWidth;
+  btn.classList.add("beat");
+}
+
+function spawnHeartBurst() {
+  const layer = document.getElementById("heartParticles");
+  const glow = document.getElementById("heartGlow");
+  if (!layer) return;
+
+  layer.innerHTML = "";
+
+  if (glow) {
+    glow.classList.remove("flash");
+    void glow.offsetWidth;
+    glow.classList.add("flash");
+  }
+
+  const n = 22;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement("i");
+    p.className = "heartParticle";
+
+    const ang = Math.PI * 2 * (i / n) + (Math.random() * 0.35);
+    const dist = 28 + Math.random() * 70;
+    const x = Math.cos(ang) * dist;
+    const y = Math.sin(ang) * dist;
+
+    p.style.setProperty("--x", `${x.toFixed(1)}px`);
+    p.style.setProperty("--y", `${y.toFixed(1)}px`);
+    p.style.setProperty("--r", `${(Math.random() * 80 - 40).toFixed(1)}deg`);
+    p.style.setProperty("--s", `${(0.7 + Math.random() * 1.2).toFixed(2)}`);
+    p.style.setProperty("--d", `${Math.floor(Math.random() * 120)}ms`);
+
+    const sz = 10 + Math.random() * 14;
+    p.style.width = `${sz}px`;
+    p.style.height = `${sz}px`;
+
+    layer.appendChild(p);
+    setTimeout(() => p.remove(), 1200);
+  }
+}
 
 export default function App() {
   const pages = PAGES;
@@ -163,6 +266,13 @@ export default function App() {
 
   function onNext() {
     if (!page) return;
+    // Intro'dan çıkarken: ilk mesaj da gözüksün
+if (index === 0) {
+  const nextIndex = (index + 1) % pages.length;
+  showStepMessage(stepMessageForIndex(0), nextIndex);
+  return;
+}
+
 
     // Intro'da müziği başlat
     if (index === 0 && audioRef.current && audioRef.current.paused) {
@@ -185,15 +295,17 @@ export default function App() {
       wrap?.setAttribute("aria-hidden", "false");
 
       if (stamp) {
-        stamp.classList.remove("play");
-        void stamp.offsetWidth;
-        stamp.classList.add("play");
-      }
+  stamp.classList.remove("play");
+  void stamp.offsetWidth;
+  stamp.classList.add("play");
+  spawnFullScreenHeartsFromStamp(); // ✅ geri geldi
+}
+
 
       setTimeout(() => {
         const nextIndex = (index + 1) % pages.length;
         showStepMessage(stepMessageForIndex(nextIndex), nextIndex);
-      }, 820);
+      }, 2200);
 
       return;
     }
@@ -580,22 +692,37 @@ export default function App() {
                 ) : null}
 
                 {/* HEART */}
-                {page.type === "heart" ? (
-                  <div className="heartWrap reveal lift" style={{ "--d": "480ms" }}>
-                    <div className="heartRow">
-                      <button className="heartBtn" type="button" onClick={() => setHeat((h) => clamp(h + 8, 0, 100))}>
-                        ❤
-                      </button>
-                      <div>
-                        <div className="meter">
-                          <div className="meterFill" style={{ width: `${heat}%` }} />
-                        </div>
-                        <div className="small">{heat}% — biraz daha…</div>
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
+                
+                
+{page.type === "heart" ? (
+  <div className="heartWrap reveal lift" style={{ "--d": "480ms" }}>
+    <div className="heartRow">
+      <div className="heartFx" aria-hidden="true">
+        <div className="heartParticles" id="heartParticles" />
+        <div className="heartGlow" id="heartGlow" />
+      </div>
 
+      <button
+        className="heartBtn"
+        id="heartBtn"
+        type="button"
+        onClick={() => {
+          setHeat((h) => clamp(h + 8, 0, 100));
+          spawnHeartBurst();
+          pulseHeartButton();
+        }}
+      >
+        ❤
+      </button>
+      <div>
+        <div className="meter">
+          <div className="meterFill" style={{ width: `${heat}%` }} />
+        </div>
+        <div className="small">{heat}% — biraz daha…</div>
+      </div>
+    </div>
+  </div>
+) : null}
                 {/* PIN */}
                 {page.type === "pin" ? (
                   <div className="reveal lift" style={{ "--d": "420ms" }}>
